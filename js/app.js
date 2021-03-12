@@ -4,6 +4,9 @@ var app = {
 
     // TODO
     app.drawBoard();
+    app.moveForward();
+    app.turnRight();
+    app.moveForward();
 
     // Event listeners - TODO
   },
@@ -42,8 +45,89 @@ var app = {
     cellEnd.classList.add('cellEnd');
 
     // on définit la position du curseur comme celle de la case de départ
-    cellStart.classList.add('cellCurrent');
+    cellStart.classList.add('cellCurrent', 'cellCurrent-right');
 
+  },
+  
+  moveForward: function(){
+
+    let currentCell = document.querySelector('.cellCurrent');
+    let currentCellPosition = currentCellClassesList[3];
+
+    //modifier moveForward en fonction de la position du curseur !!
+
+    let nextCell = currentCell.nextElementSibling;
+    // est ce que l'élément suivant existe ?
+    if (nextCell!=''){
+      //on récupère toutes les classes 
+      let currentCellClassesList = currentCell.classList;
+      // la position de la classe est toujours en 4ème position dans la liste
+      let currentCellPosition = currentCellClassesList[3];
+      //console.log(currentCellClassesList[3]);
+      currentCell.classList.remove("cellCurrent");
+      nextCell.classList.add('cellCurrent');
+      nextCell.classList.add(currentCellPosition);
+    } else {
+      // on remonte au parent de la currentCell (= la ligne)
+      //let currentRow = currentCell.closest('.cellRow');
+      // on prend l'élément suivant ()= la ligne suivante)
+      //let 
+    }
+    //console.log(nextCell);
+    
+
+  },
+
+  turnRight: function(){
+    let currentCell = document.querySelector('.cellCurrent');
+    console.log(currentCell);
+
+    // si le curseur pointe vers la droite
+    if (currentCell.classList.contains('cellCurrent-right')){
+      currentCell.classList.remove('cellCurrent-right');
+      currentCell.classList.add('cellCurrent-bottom');
+
+    // si le curseur pointe vers le bas  
+    } else if (currentCell.classList.contains('cellCurrent-bottom')){
+      currentCell.classList.remove('cellCurrent-bottom');
+      currentCell.classList.add('cellCurrent-left');
+
+    // si le curseur pointe vers la gauche
+    } else if (currentCell.classList.contains('cellCurrent-left')){
+      currentCell.classList.remove('cellCurrent-left');
+      currentCell.classList.add('cellCurrent-top');
+
+    // si le curseur pointe vers le haut
+    } else if (currentCell.classList.contains('cellCurrent-top')){
+      currentCell.classList.remove('cellCurrent-top');
+      currentCell.classList.add('cellCurrent-right');
+    }
+  },
+
+  turnLeft: function(){
+    let currentCell = document.querySelector('.cellCurrent');
+    //console.log(currentCell);
+
+    // si le curseur pointe vers la droite
+    if (currentCell.classList.contains('cellCurrent-right')){
+      currentCell.classList.remove('cellCurrent-right');
+      currentCell.classList.add('cellCurrent-top');
+
+    // si le curseur pointe vers le bas  
+    } else if (currentCell.classList.contains('cellCurrent-bottom')){
+      currentCell.classList.remove('cellCurrent-bottom');
+      currentCell.classList.add('cellCurrent-right');
+
+    // si le curseur pointe vers la gauche
+    } else if (currentCell.classList.contains('cellCurrent-left')){
+      currentCell.classList.remove('cellCurrent-left');
+      currentCell.classList.add('cellCurrent-bottom');
+
+    // si le curseur pointe vers le haut
+    } else if (currentCell.classList.contains('cellCurrent-top')){
+      currentCell.classList.remove('cellCurrent-top');
+      currentCell.classList.add('cellCurrent-left');
+    }
   },
 
   handleLaunchScriptButton: function() {
