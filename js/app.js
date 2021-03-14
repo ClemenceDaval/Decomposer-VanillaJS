@@ -1,12 +1,34 @@
 var app = {
+
+  // propriétés de la grille
+  nbOfRows : 4,
+  nbOfColumns : 6,
+
+  // la propriété position correspond au numéro de cellule dans la ligne
+  position : 0,
+  nbOfMoves : 0,
+
   init: function() {
     console.log('init');
 
     // TODO
     app.drawBoard();
     app.moveForward();
+    app.moveForward();
+    app.moveForward();
+
+    app.turnRight();
     app.turnRight();
     app.moveForward();
+    app.moveForward();
+   //app.moveForward();
+    
+
+
+
+
+    //app.turnRight();
+    //app.moveForward();
 
     // Event listeners - TODO
   },
@@ -18,13 +40,13 @@ var app = {
 
     // on créé notre board
     // on créé les 4 lignes
-    for(let i=1 ; i<5 ; i++){
+    for(let i=0 ; i<app.nbOfRows ; i++){
       let cellRow = document.createElement('div');
       cellRow.classList.add('cellRow');
       cellRow.setAttribute('id', 'row' + i);
       
       // dans chaque ligne, on créé un 6 cellules
-      for(let i=1 ; i<7 ; i++){
+      for(let i=0 ; i<app.nbOfColumns ; i++){
         let cell = document.createElement('div');
         cell.classList.add('cell');
         cellRow.appendChild(cell);
@@ -50,30 +72,39 @@ var app = {
   },
   
   moveForward: function(){
-
     let currentCell = document.querySelector('.cellCurrent');
-    let currentCellPosition = currentCellClassesList[3];
-
-    //modifier moveForward en fonction de la position du curseur !!
-
-    let nextCell = currentCell.nextElementSibling;
-    // est ce que l'élément suivant existe ?
-    if (nextCell!=''){
-      //on récupère toutes les classes 
-      let currentCellClassesList = currentCell.classList;
-      // la position de la classe est toujours en 4ème position dans la liste
-      let currentCellPosition = currentCellClassesList[3];
-      //console.log(currentCellClassesList[3]);
-      currentCell.classList.remove("cellCurrent");
-      nextCell.classList.add('cellCurrent');
-      nextCell.classList.add(currentCellPosition);
+    let currentCellClassesList = currentCell.classList;
+    
+    // si le curseur pointe vers la droite
+    if (currentCell.classList.contains('cellCurrent-right')){
+      if (app.position != (app.nbOfColumns - 1)){
+        let nextCell = currentCell.nextElementSibling;
+        //console.log(nextCell);
+        currentCell.classList.remove('cellCurrent');
+        currentCell.classList.remove('cellCurrent-right')
+        nextCell.classList.add('cellCurrent');
+        nextCell.classList.add('cellCurrent-right');
+        app.position = app.position + 1 ;
+        console.log('position : ' + app.position);
     } else {
-      // on remonte au parent de la currentCell (= la ligne)
-      //let currentRow = currentCell.closest('.cellRow');
-      // on prend l'élément suivant ()= la ligne suivante)
-      //let 
-    }
-    //console.log(nextCell);
+      console.log('erreur ! Vous ne pouvez pas aller dans cette direction');
+    } 
+  // si le curseur pointe vers la gauche
+  } else if (currentCell.classList.contains('cellCurrent-left')){
+    if (app.position != 0){
+      let previousCell = currentCell.previousElementSibling;
+      //console.log(previousCell);
+      currentCell.classList.remove('cellCurrent');
+      currentCell.classList.remove('cellCurrent-left');
+      previousCell.classList.add('cellCurrent');
+      previousCell.classList.add('cellCurrent-left');
+      app.position = app.position -1 ;
+      console.log('position : ' + app.position);
+    } else {
+      console.log('erreur ! Vous ne pouvez pas aller dans cette direction');
+    } 
+  }
+    
     
 
   },
