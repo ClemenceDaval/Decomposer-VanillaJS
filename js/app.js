@@ -12,7 +12,11 @@ var app = {
     console.log('init');
 
     // TODO
+    
+    //app.randomStartAndEndCellsNumbers(app.nbOfRows*app.nbOfColumns+1);
     app.drawBoard();
+    //console.log(Math.ceil(17/6));
+    //console.log(17%6);
     // app.moveForward();
     // app.moveForward();
    
@@ -55,17 +59,23 @@ var app = {
       
     }
 
-    // on définit les cases de départ et d'arrivée
-    let firstRow = board.firstElementChild ;
-    //console.log(firstRow);
-    let cellStart = firstRow.firstElementChild;
-    cellStart.classList.add('cellStart');
+    // on définit les cases de départ et d'arrivée au hasard
+    // on choisit 2 nombres random au hasard entre 1 et 24
+    //app.randomStartAndEndCellsNumbers(app.numberOfRows*app.nbOfColumns);
+    let randomStartAndEndCellsNumbers = app.generateTwoRandomDifferentNumbers(app.nbOfRows*app.nbOfColumns);
+    app.displayStartAndEndCells(randomStartAndEndCellsNumbers);
 
-    let lastRow = board.lastElementChild ;
-    let cellEnd = lastRow.lastElementChild;
-    cellEnd.classList.add('cellEnd');
+    // let firstRow = board.firstElementChild ;
+    // //console.log(firstRow);
+    // let cellStart = firstRow.firstElementChild;
+    // cellStart.classList.add('cellStart');
+
+    // let lastRow = board.lastElementChild ;
+    // let cellEnd = lastRow.lastElementChild;
+    // cellEnd.classList.add('cellEnd');
 
     // on définit la position du curseur comme celle de la case de départ
+    let cellStart = document.querySelector('.cellStart');
     cellStart.classList.add('cellCurrent', 'cellCurrent-right');
 
   },
@@ -230,11 +240,6 @@ var app = {
       return;
     }
 
-    
-
-
-
-
     // Increment
     index++;
 
@@ -258,8 +263,54 @@ var app = {
     } else {
       alert('perdu !');
     }
-    // TODO display if the game is won or not
   },
+
+  generateTwoRandomDifferentNumbers: function(max){
+    let number1 = Math.floor(Math.random()*Math.floor(max))+1;
+    console.log(number1);
+    let number2 = Math.floor(Math.random()*Math.floor(max))+1;
+    console.log(number2);
+    // si jamais ces nombres sont égaux : on recommence !
+    if (number1 == number2){
+      app.generateTwoRandomDifferentNumbers(max);
+    }
+
+    let numbers = [number1, number2];
+    console.log(numbers);
+    return numbers;
+
+   
+  },
+
+  displayStartAndEndCells: function(startAndEndCellsNumbers){
+    
+    let startCellCoordinates = this.defineCellFromNumber(startAndEndCellsNumbers[0]);
+    console.log(startCellCoordinates);
+    let startRow = document.getElementById('row' + startCellCoordinates[0]);
+    let startCell = startRow.children[startCellCoordinates[1]-1];
+    startCell.classList.add('cellStart');
+
+    let endCellCoordinates = this.defineCellFromNumber(startAndEndCellsNumbers[1]);
+    console.log(endCellCoordinates);
+    let endRow = document.getElementById('row' + endCellCoordinates[0]);
+    let endCell = endRow.children[endCellCoordinates[1]-1];
+    endCell.classList.add('cellEnd');
+
+
+  },
+
+   defineCellFromNumber: function(randomNumber){
+    let rowNumber = Math.ceil(randomNumber/app.nbOfColumns);
+    let columnNumber = randomNumber%app.nbOfColumns;
+    if (columnNumber == 0){
+      columnNumber = 6;
+    }
+    let cellCoordinates = [rowNumber, columnNumber];
+    return cellCoordinates;
+    
+
+  }
+
 
 
 };
