@@ -13,21 +13,23 @@ var app = {
 
     // TODO
     app.drawBoard();
-    app.moveForward();
-    app.moveForward();
+    // app.moveForward();
+    // app.moveForward();
    
-    app.turnRight();
-    app.moveForward();
-    app.turnRight();
-    app.moveForward();
-    app.turnLeft();
-    app.turnLeft();
-    app.moveForward();
-    app.turnLeft();
-    app.moveForward();
-    app.moveForward();
+    // app.turnRight();
+    // app.moveForward();
+    // app.turnRight();
+    // app.moveForward();
+    // app.turnLeft();
+    // app.turnLeft();
+    // app.moveForward();
+    // app.turnLeft();
+    // app.moveForward();
+    // app.moveForward();
 
-    // Event listeners - TODO
+    // ajout d'un event listener sur le bouton 
+    let launchButton = document.getElementById('launchScript');
+    launchButton.addEventListener('click', app.handleLaunchScriptButton);
   },
 
   drawBoard: function(){
@@ -85,7 +87,7 @@ var app = {
         app.position = app.position + 1 ;
         console.log('position : ' + app.position);
       } else {
-      console.log('erreur ! Vous ne pouvez pas aller dans cette direction');
+      alert('erreur ! Vous ne pouvez pas aller dans cette direction');
       } 
 
     // si le curseur pointe vers la gauche
@@ -101,7 +103,7 @@ var app = {
         app.position = app.position -1 ;
         console.log('position : ' + app.position);
       } else {
-        console.log('erreur ! Vous ne pouvez pas aller dans cette direction');
+        alert('erreur ! Vous ne pouvez pas aller dans cette direction');
       } 
 
     // si le curseur pointe vers le haut
@@ -122,7 +124,7 @@ var app = {
         newCell.classList.add('cellCurrent');
         newCell.classList.add('cellCurrent-top');
       } else {
-        echo ('Erreur ! Vous ne pouvez pas aller dans cette direction');
+        alert('Erreur ! Vous ne pouvez pas aller dans cette direction');
       }
     
     // si le curseur pointe vers le bas
@@ -143,7 +145,7 @@ var app = {
         newCell.classList.add('cellCurrent');
         newCell.classList.add('cellCurrent-bottom');
       } else {
-        echo ('Erreur ! Vous ne pouvez pas aller dans cette direction');
+        alert('Erreur ! Vous ne pouvez pas aller dans cette direction');
       }
     }   
 
@@ -201,10 +203,12 @@ var app = {
     }
   },
 
-  handleLaunchScriptButton: function() {
-    // TODO
-    
-    // TODO : get all lines as an array
+  handleLaunchScriptButton: function(event) {
+    // on cible l'input et on récupère son contenu
+    let textarea = document.getElementById('userCode');
+    let text = textarea.value;
+    console.log(text);
+    codeLines = text.split('\n');
 
     window.setTimeout(function() {
       app.codeLineLoop(codeLines, 0);
@@ -215,6 +219,20 @@ var app = {
     // Getting currentLine
     var currentLine = codeLines[index];
     console.log(currentLine);
+    if (currentLine == 'move forward'){
+      app.moveForward();
+    } else if (currentLine == 'turn right'){
+      app.turnRight();
+    } else if (currentLine == 'turn left'){
+      app.turnLeft();
+    } else {
+      console.log('cette commande n\'existe pas!');
+      return;
+    }
+
+    
+
+
 
 
     // Increment
@@ -234,6 +252,12 @@ var app = {
   },
 
   checkSuccess: function() {
+    let currentCell = document.querySelector('.cellCurrent');
+    if (currentCell.classList.contains('cellEnd')){
+      alert('vous avez gagné !');
+    } else {
+      alert('perdu !');
+    }
     // TODO display if the game is won or not
   },
 
