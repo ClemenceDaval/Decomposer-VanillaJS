@@ -51,6 +51,7 @@ var app = {
     }
     app.displayStartAndEndCells(startCellNumber, endCellNumber);
 
+    // ancienne version (cases de départ et d'arrivée non aléatoires)
     // let firstRow = board.firstElementChild ;
     // let cellStart = firstRow.firstElementChild;
     // cellStart.classList.add('cellStart');
@@ -250,12 +251,11 @@ var app = {
     }
   },
 
-    generateRandomNumber: function(max){
+  generateRandomNumber: function(max){
     let number = Math.floor(Math.random()*Math.floor(max))+1;
     console.log(number);
     return number;
   },
-
 
   displayStartAndEndCells: function(startCellNumber, endCellNumber){
     
@@ -273,7 +273,7 @@ var app = {
 
   },
 
-   defineCellFromNumber: function(randomNumber){
+  defineCellFromNumber: function(randomNumber){
     let rowNumber = Math.ceil(randomNumber/app.nbOfColumns);
     let columnNumber = randomNumber%app.nbOfColumns;
     if (columnNumber == 0){
