@@ -9,25 +9,12 @@ var app = {
   nbOfMoves : 0,
 
   init: function() {
-    console.log('init');
-
-    // TODO
+    
     app.drawBoard();
-    app.moveForward();
-    app.moveForward();
-   
-    app.turnRight();
-    app.moveForward();
-    app.turnRight();
-    app.moveForward();
-    app.turnLeft();
-    app.turnLeft();
-    app.moveForward();
-    app.turnLeft();
-    app.moveForward();
-    app.moveForward();
-
-    // Event listeners - TODO
+    
+    // ajout d'un event listener sur le bouton 
+    let launchButton = document.getElementById('launchScript');
+    launchButton.addEventListener('click', app.handleLaunchScriptButton);
   },
 
   drawBoard: function(){
@@ -53,17 +40,23 @@ var app = {
       
     }
 
-    // on définit les cases de départ et d'arrivée
-    let firstRow = board.firstElementChild ;
-    //console.log(firstRow);
-    let cellStart = firstRow.firstElementChild;
-    cellStart.classList.add('cellStart');
+    // on définit les cases de départ et d'arrivée au hasard
+    // on choisit 2 nombres random au hasard entre 1 et 24
+    //app.randomStartAndEndCellsNumbers(app.numberOfRows*app.nbOfColumns);
+    let randomStartAndEndCellsNumbers = app.generateTwoRandomDifferentNumbers(app.nbOfRows*app.nbOfColumns);
+    app.displayStartAndEndCells(randomStartAndEndCellsNumbers);
 
-    let lastRow = board.lastElementChild ;
-    let cellEnd = lastRow.lastElementChild;
-    cellEnd.classList.add('cellEnd');
+    // let firstRow = board.firstElementChild ;
+    // //console.log(firstRow);
+    // let cellStart = firstRow.firstElementChild;
+    // cellStart.classList.add('cellStart');
+
+    // let lastRow = board.lastElementChild ;
+    // let cellEnd = lastRow.lastElementChild;
+    // cellEnd.classList.add('cellEnd');
 
     // on définit la position du curseur comme celle de la case de départ
+    let cellStart = document.querySelector('.cellStart');
     cellStart.classList.add('cellCurrent', 'cellCurrent-right');
 
   },
@@ -85,7 +78,7 @@ var app = {
         app.position = app.position + 1 ;
         console.log('position : ' + app.position);
       } else {
-      console.log('erreur ! Vous ne pouvez pas aller dans cette direction');
+      alert('erreur ! Vous ne pouvez pas aller dans cette direction');
       } 
 
     // si le curseur pointe vers la gauche
@@ -101,7 +94,7 @@ var app = {
         app.position = app.position -1 ;
         console.log('position : ' + app.position);
       } else {
-        console.log('erreur ! Vous ne pouvez pas aller dans cette direction');
+        alert('erreur ! Vous ne pouvez pas aller dans cette direction');
       } 
 
     // si le curseur pointe vers le haut
@@ -122,7 +115,7 @@ var app = {
         newCell.classList.add('cellCurrent');
         newCell.classList.add('cellCurrent-top');
       } else {
-        echo ('Erreur ! Vous ne pouvez pas aller dans cette direction');
+        alert('Erreur ! Vous ne pouvez pas aller dans cette direction');
       }
     
     // si le curseur pointe vers le bas
@@ -143,7 +136,7 @@ var app = {
         newCell.classList.add('cellCurrent');
         newCell.classList.add('cellCurrent-bottom');
       } else {
-        echo ('Erreur ! Vous ne pouvez pas aller dans cette direction');
+        alert('Erreur ! Vous ne pouvez pas aller dans cette direction');
       }
     }   
 
@@ -201,10 +194,12 @@ var app = {
     }
   },
 
-  handleLaunchScriptButton: function() {
-    // TODO
-    
-    // TODO : get all lines as an array
+  handleLaunchScriptButton: function(event) {
+    // on cible l'input et on récupère son contenu
+    let textarea = document.getElementById('userCode');
+    let text = textarea.value;
+    console.log(text);
+    codeLines = text.split('\n');
 
     window.setTimeout(function() {
       app.codeLineLoop(codeLines, 0);
@@ -215,7 +210,16 @@ var app = {
     // Getting currentLine
     var currentLine = codeLines[index];
     console.log(currentLine);
-
+    if (currentLine == 'move forward'){
+      app.moveForward();
+    } else if (currentLine == 'turn right'){
+      app.turnRight();
+    } else if (currentLine == 'turn left'){
+      app.turnLeft();
+    } else {
+      console.log('cette commande n\'existe pas!');
+      return;
+    }
 
     // Increment
     index++;
@@ -234,8 +238,60 @@ var app = {
   },
 
   checkSuccess: function() {
-    // TODO display if the game is won or not
+    let currentCell = document.querySelector('.cellCurrent');
+    if (currentCell.classList.contains('cellEnd')){
+      alert('vous avez gagné !');
+    } else {
+      alert('perdu !');
+    }
   },
+
+  generateTwoRandomDifferentNumbers: function(max){
+    let number1 = Math.floor(Math.random()*Math.floor(max))+1;
+    console.log(number1);
+    let number2 = Math.floor(Math.random()*Math.floor(max))+1;
+    console.log(number2);
+    // si jamais ces nombres sont égaux : on recommence !
+    if (number1 == number2){
+      app.generateTwoRandomDifferentNumbers(max);
+    }
+
+    let numbers = [number1, number2];
+    console.log(numbers);
+    return numbers;
+
+   
+  },
+
+  displayStartAndEndCells: function(startAndEndCellsNumbers){
+    
+    let startCellCoordinates = this.defineCellFromNumber(startAndEndCellsNumbers[0]);
+    console.log(startCellCoordinates);
+    let startRow = document.getElementById('row' + startCellCoordinates[0]);
+    let startCell = startRow.children[startCellCoordinates[1]-1];
+    startCell.classList.add('cellStart');
+
+    let endCellCoordinates = this.defineCellFromNumber(startAndEndCellsNumbers[1]);
+    console.log(endCellCoordinates);
+    let endRow = document.getElementById('row' + endCellCoordinates[0]);
+    let endCell = endRow.children[endCellCoordinates[1]-1];
+    endCell.classList.add('cellEnd');
+
+
+  },
+
+   defineCellFromNumber: function(randomNumber){
+    let rowNumber = Math.ceil(randomNumber/app.nbOfColumns);
+    let columnNumber = randomNumber%app.nbOfColumns;
+    if (columnNumber == 0){
+      columnNumber = 6;
+    }
+    let cellCoordinates = [rowNumber, columnNumber];
+    return cellCoordinates;
+    
+
+  }
+
 
 
 };
