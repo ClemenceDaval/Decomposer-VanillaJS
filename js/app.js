@@ -9,28 +9,9 @@ var app = {
   nbOfMoves : 0,
 
   init: function() {
-    console.log('init');
-
-    // TODO
     
-    //app.randomStartAndEndCellsNumbers(app.nbOfRows*app.nbOfColumns+1);
     app.drawBoard();
-    //console.log(Math.ceil(17/6));
-    //console.log(17%6);
-    // app.moveForward();
-    // app.moveForward();
-   
-    // app.turnRight();
-    // app.moveForward();
-    // app.turnRight();
-    // app.moveForward();
-    // app.turnLeft();
-    // app.turnLeft();
-    // app.moveForward();
-    // app.turnLeft();
-    // app.moveForward();
-    // app.moveForward();
-
+    
     // ajout d'un event listener sur le bouton 
     let launchButton = document.getElementById('launchScript');
     launchButton.addEventListener('click', app.handleLaunchScriptButton);
