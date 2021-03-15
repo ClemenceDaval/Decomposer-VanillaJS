@@ -29,7 +29,7 @@ var app = {
       cellRow.classList.add('cellRow');
       cellRow.setAttribute('id', 'row' + i);
       
-      // dans chaque ligne, on créé un 6 cellules
+      // dans chaque ligne, on créé 6 cellules
       for(let i=1 ; i<(app.nbOfColumns+1) ; i++){
         let cell = document.createElement('div');
         cell.classList.add('cell');
@@ -43,11 +43,15 @@ var app = {
     // on définit les cases de départ et d'arrivée au hasard
     // on choisit 2 nombres random au hasard entre 1 et 24
     //app.randomStartAndEndCellsNumbers(app.numberOfRows*app.nbOfColumns);
-    let randomStartAndEndCellsNumbers = app.generateTwoRandomDifferentNumbers(app.nbOfRows*app.nbOfColumns);
-    app.displayStartAndEndCells(randomStartAndEndCellsNumbers);
+    let startCellNumber = app.generateRandomNumber(app.nbOfRows*app.nbOfColumns);
+    let endCellNumber= app.generateRandomNumber(app.nbOfRows*app.nbOfColumns)
+    //tant que endCellNumber est égal à startCellNumber, on regenere un autre nombre
+    while (startCellNumber == endCellNumber){
+      endCellNumber= app.generateRandomNumber(app.nbOfRows*app.nbOfColumns);
+    }
+    app.displayStartAndEndCells(startCellNumber, endCellNumber);
 
     // let firstRow = board.firstElementChild ;
-    // //console.log(firstRow);
     // let cellStart = firstRow.firstElementChild;
     // cellStart.classList.add('cellStart');
 
@@ -246,37 +250,25 @@ var app = {
     }
   },
 
-  generateTwoRandomDifferentNumbers: function(max){
-    let number1 = Math.floor(Math.random()*Math.floor(max))+1;
-    console.log(number1);
-    let number2 = Math.floor(Math.random()*Math.floor(max))+1;
-    console.log(number2);
-    // si jamais ces nombres sont égaux : on recommence !
-    if (number1 == number2){
-      app.generateTwoRandomDifferentNumbers(max);
-    }
-
-    let numbers = [number1, number2];
-    console.log(numbers);
-    return numbers;
-
-   
+  generateRandomNumber: function(max){
+    let number = Math.floor(Math.random()*Math.floor(max))+1;
+    console.log(number);
+    return number;
   },
 
-  displayStartAndEndCells: function(startAndEndCellsNumbers){
+  displayStartAndEndCells: function(startCellNumber, endCellNumber){
     
-    let startCellCoordinates = this.defineCellFromNumber(startAndEndCellsNumbers[0]);
+    let startCellCoordinates = app.defineCellFromNumber(startCellNumber);
     console.log(startCellCoordinates);
     let startRow = document.getElementById('row' + startCellCoordinates[0]);
     let startCell = startRow.children[startCellCoordinates[1]-1];
     startCell.classList.add('cellStart');
 
-    let endCellCoordinates = this.defineCellFromNumber(startAndEndCellsNumbers[1]);
+    let endCellCoordinates = app.defineCellFromNumber(endCellNumber);
     console.log(endCellCoordinates);
     let endRow = document.getElementById('row' + endCellCoordinates[0]);
     let endCell = endRow.children[endCellCoordinates[1]-1];
     endCell.classList.add('cellEnd');
-
 
   },
 
@@ -289,10 +281,7 @@ var app = {
     let cellCoordinates = [rowNumber, columnNumber];
     return cellCoordinates;
     
-
   }
-
-
 
 };
 
