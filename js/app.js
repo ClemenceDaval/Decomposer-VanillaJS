@@ -51,6 +51,7 @@ var app = {
     }
     app.displayStartAndEndCells(startCellNumber, endCellNumber);
 
+    // ancienne version (cases de départ et d'arrivée non aléatoires)
     // let firstRow = board.firstElementChild ;
     // let cellStart = firstRow.firstElementChild;
     // cellStart.classList.add('cellStart');
@@ -272,7 +273,7 @@ var app = {
 
   },
 
-   defineCellFromNumber: function(randomNumber){
+  defineCellFromNumber: function(randomNumber){
     let rowNumber = Math.ceil(randomNumber/app.nbOfColumns);
     let columnNumber = randomNumber%app.nbOfColumns;
     if (columnNumber == 0){
